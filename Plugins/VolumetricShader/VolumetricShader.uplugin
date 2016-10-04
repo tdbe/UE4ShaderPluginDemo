@@ -1,0 +1,21 @@
+{
+    "PluginFileVersion" : 3,
+	
+	"FriendlyName" : "Volumetric Shader",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "MichalKlos",
+	"CreatedByURL" : "michal.m.klos@gmail.com",
+	"EngineVersion" : "4.12.5",
+	"Description" : "An example stand alone compute shader that can be run from a plugin",
+	"Category" : "Programming Rendering.Plugins",
+	
+    "Modules" :
+	[
+		{
+			"Name" : "VolumetricShader",
+			"Type" : "Runtime",
+			"LoadingPhase" : "PostConfigInit"
+		}
+	]
+}
