@@ -74,29 +74,39 @@ void AShaderPluginDemoCharacter::BeginPlay() {
         TEXT("GripPoint")
 	); 
 
-    PixelShading = new FPixelShaderUsageExample(PixelShaderTopLeftColor, GetWorld()->Scene->GetFeatureLevel());
-    ComputeShading = new FComputeShaderUsageExample(ComputeShaderSimulationSpeed, 1024, 1024, GetWorld()->Scene->GetFeatureLevel());
+    PixelShader = new FPixelShaderUsageExample(PixelShaderTopLeftColor, GetWorld()->Scene->GetFeatureLevel());
+    ComputeShader = new FComputeShaderUsageExample(ComputeShaderSimulationSpeed, 1024, 1024, GetWorld()->Scene->GetFeatureLevel());
+	VolumetricShader = new FVolumetricShaderUsageExample(ComputeShaderSimulationSpeed, 1024, 1024, GetWorld()->Scene->GetFeatureLevel());
 }
 
 //Do not forget cleanup :)
 void AShaderPluginDemoCharacter::BeginDestroy() {
     Super::BeginDestroy();
 
-    if (PixelShading) {
-        delete PixelShading;
+    if (PixelShader) {
+        delete PixelShader;
     }
 
-    if (ComputeShading) {
-        delete ComputeShading;
+    if (ComputeShader) {
+        delete ComputeShader;
     }
+
+	if (VolumetricShader) {
+		delete VolumetricShader;
+	}
 }
 
 //Saving functions
 void AShaderPluginDemoCharacter::SavePixelShaderOutput() {
-    PixelShading->Save();
+    PixelShader->Save();
 }
+
 void AShaderPluginDemoCharacter::SaveComputeShaderOutput() {
-    ComputeShading->Save();
+    ComputeShader->Save();
+}
+
+void AShaderPluginDemoCharacter::SaveVolumetricShaderOutput() {
+	VolumetricShader->Save();
 }
 
 void AShaderPluginDemoCharacter::ModifyComputeShaderBlend(float NewScalar) {
@@ -108,7 +118,7 @@ void AShaderPluginDemoCharacter::Tick(float DeltaSeconds) {
 
     TotalElapsedTime += DeltaSeconds;
 
-    if (PixelShading) {
+    if (PixelShader) {
         EndColorBuildup = FMath::Clamp(EndColorBuildup + DeltaSeconds * EndColorBuildupDirection, 0.0f, 1.0f);
 
         if (EndColorBuildup >= 1.0 || EndColorBuildup <= 0) {
@@ -116,15 +126,30 @@ void AShaderPluginDemoCharacter::Tick(float DeltaSeconds) {
         }
 
 
-        FTexture2DRHIRef InputTexture = NULL;
+        FTexture2DRHIRef InputTexture = nullptr;
 
-        if (ComputeShading) {
-            ComputeShading->ExecuteComputeShader(TotalElapsedTime);
-            InputTexture = ComputeShading->GetTexture(); //This is the output texture from the compute shader that we will pass to the pixel shader.
+        if (ComputeShader) {
+            ComputeShader->ExecuteComputeShader(TotalElapsedTime);
+			// This is the output texture from the compute shader that we will pass to the pixel shader.
+            // InputTexture = ComputeShader->GetTexture(); 
         }
 
-        ComputeShaderBlend = FMath::Clamp(ComputeShaderBlend + ComputeShaderBlendScalar * DeltaSeconds, 0.0f, 1.0f);
-        PixelShading->ExecutePixelShader(RenderTarget, InputTexture, FColor(EndColorBuildup * 255, 0, 0, 255), ComputeShaderBlend);
+		if (VolumetricShader) {
+			VolumetricShader->ExecuteComputeShader(TotalElapsedTime);
+			// This is the output texture from the compute shader that we will pass to the pixel shader.
+			// InputTexture = VolumetricShader->GetTexture();
+
+		} else {
+			UE_LOG(LogTemp, Warning, TEXT("VolumetricShader is nullptr"));
+		}
+
+		if (InputTexture) {
+			ComputeShaderBlend = FMath::Clamp(ComputeShaderBlend + ComputeShaderBlendScalar * DeltaSeconds, 0.0f, 1.0f);
+			PixelShader->ExecutePixelShader(RenderTarget, InputTexture, FColor(EndColorBuildup * 255, 0, 0, 255), ComputeShaderBlend);
+
+		} else {
+			UE_LOG(LogTemp, Warning, TEXT("InputTexture is nullptr"));
+		}
     }
 }
 

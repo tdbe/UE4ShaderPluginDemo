@@ -6,8 +6,8 @@ namespace UnrealBuildTool.Rules
         {
             PrivateIncludePaths.AddRange(
                 new string[] {
-					"VolumetricShader/Private"
-				}
+					"VolumetricShader/Private"                    
+                }
                 );
 
 			PublicDependencyModuleNames.AddRange(

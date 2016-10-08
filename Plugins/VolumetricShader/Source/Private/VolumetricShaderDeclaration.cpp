@@ -28,8 +28,8 @@
 
 //These are needed to actually implement the constant buffers so they are available inside our shader
 //They also need to be unique over the entire solution since they can in fact be accessed from any shader
-IMPLEMENT_UNIFORM_BUFFER_STRUCT(FComputeShaderConstantParameters, TEXT("CSConstants"))
-IMPLEMENT_UNIFORM_BUFFER_STRUCT(FComputeShaderVariableParameters, TEXT("CSVariables"))
+IMPLEMENT_UNIFORM_BUFFER_STRUCT(FVolumetricShaderConstantParameters, TEXT("CSConstants"))
+IMPLEMENT_UNIFORM_BUFFER_STRUCT(FVolumetricShaderVariableParameters, TEXT("CSVariables"))
 
 FVolumetricShaderDeclaration::FVolumetricShaderDeclaration(const ShaderMetaType::CompiledShaderInitializerType& Initializer)
 : FGlobalShader(Initializer)
@@ -52,16 +52,16 @@ void FVolumetricShaderDeclaration::SetSurfaces(FRHICommandList& RHICmdList, FUno
 		RHICmdList.SetUAVParameter(ComputeShaderRHI, OutputSurface.GetBaseIndex(), OutputSurfaceUAV);
 }
 
-void FVolumetricShaderDeclaration::SetUniformBuffers(FRHICommandList& RHICmdList, FComputeShaderConstantParameters& ConstantParameters, FComputeShaderVariableParameters& VariableParameters)
+void FVolumetricShaderDeclaration::SetUniformBuffers(FRHICommandList& RHICmdList, FVolumetricShaderConstantParameters& ConstantParameters, FVolumetricShaderVariableParameters& VariableParameters)
 {
-	FComputeShaderConstantParametersRef ConstantParametersBuffer;
-	FComputeShaderVariableParametersRef VariableParametersBuffer;
+	FVolumetricShaderConstantParametersRef ConstantParametersBuffer;
+	FVolumetricShaderVariableParametersRef VariableParametersBuffer;
 
-	ConstantParametersBuffer = FComputeShaderConstantParametersRef::CreateUniformBufferImmediate(ConstantParameters, UniformBuffer_SingleDraw);
-	VariableParametersBuffer = FComputeShaderVariableParametersRef::CreateUniformBufferImmediate(VariableParameters, UniformBuffer_SingleDraw);
+	ConstantParametersBuffer = FVolumetricShaderConstantParametersRef::CreateUniformBufferImmediate(ConstantParameters, UniformBuffer_SingleDraw);
+	VariableParametersBuffer = FVolumetricShaderVariableParametersRef::CreateUniformBufferImmediate(VariableParameters, UniformBuffer_SingleDraw);
 
-	SetUniformBufferParameter(RHICmdList, GetComputeShader(), GetUniformBufferParameter<FComputeShaderConstantParameters>(), ConstantParametersBuffer);
-	SetUniformBufferParameter(RHICmdList, GetComputeShader(), GetUniformBufferParameter<FComputeShaderVariableParameters>(), VariableParametersBuffer);
+	SetUniformBufferParameter(RHICmdList, GetComputeShader(), GetUniformBufferParameter<FVolumetricShaderConstantParameters>(), ConstantParametersBuffer);
+	SetUniformBufferParameter(RHICmdList, GetComputeShader(), GetUniformBufferParameter<FVolumetricShaderVariableParameters>(), VariableParametersBuffer);
 }
 
 /* Unbinds buffers that will be used elsewhere */

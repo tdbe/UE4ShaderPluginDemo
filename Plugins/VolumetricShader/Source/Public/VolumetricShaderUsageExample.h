@@ -63,8 +63,8 @@ private:
 	bool bIsUnloading;
 	bool bSave;
 
-	FComputeShaderConstantParameters ConstantParameters;
-	FComputeShaderVariableParameters VariableParameters;
+	FVolumetricShaderConstantParameters ConstantParameters;
+	FVolumetricShaderVariableParameters VariableParameters;
 	ERHIFeatureLevel::Type FeatureLevel;
 
 	/** Main texture */

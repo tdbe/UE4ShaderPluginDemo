@@ -29,17 +29,17 @@
 #include "RHICommandList.h"
 
 //This buffer should contain variables that never, or rarely change
-BEGIN_UNIFORM_BUFFER_STRUCT(FComputeShaderConstantParameters, )
+BEGIN_UNIFORM_BUFFER_STRUCT(FVolumetricShaderConstantParameters, )
 DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, SimulationSpeed)
-END_UNIFORM_BUFFER_STRUCT(FComputeShaderConstantParameters)
+END_UNIFORM_BUFFER_STRUCT(FVolumetricShaderConstantParameters)
 
 //This buffer is for variables that change very often (each frame for example)
-BEGIN_UNIFORM_BUFFER_STRUCT(FComputeShaderVariableParameters, )
+BEGIN_UNIFORM_BUFFER_STRUCT(FVolumetricShaderVariableParameters, )
 DECLARE_UNIFORM_BUFFER_STRUCT_MEMBER(float, TotalTimeElapsedSeconds)
-END_UNIFORM_BUFFER_STRUCT(FComputeShaderVariableParameters)
+END_UNIFORM_BUFFER_STRUCT(FVolumetricShaderVariableParameters)
 
-typedef TUniformBufferRef<FComputeShaderConstantParameters> FComputeShaderConstantParametersRef;
-typedef TUniformBufferRef<FComputeShaderVariableParameters> FComputeShaderVariableParametersRef;
+typedef TUniformBufferRef<FVolumetricShaderConstantParameters> FVolumetricShaderConstantParametersRef;
+typedef TUniformBufferRef<FVolumetricShaderVariableParameters> FVolumetricShaderVariableParametersRef;
 
 /***************************************************************************/
 /* This class is what encapsulates the shader in the engine.               */
@@ -72,7 +72,7 @@ public:
 	//This function is required to let us bind our runtime surface to the shader using an UAV.
 	void SetSurfaces(FRHICommandList& RHICmdList, FUnorderedAccessViewRHIRef OutputSurfaceUAV);
 	//This function is required to bind our constant / uniform buffers to the shader.
-	void SetUniformBuffers(FRHICommandList& RHICmdList, FComputeShaderConstantParameters& ConstantParameters, FComputeShaderVariableParameters& VariableParameters);
+	void SetUniformBuffers(FRHICommandList& RHICmdList, FVolumetricShaderConstantParameters& ConstantParameters, FVolumetricShaderVariableParameters& VariableParameters);
 	//This is used to clean up the buffer binds after each invocation to let them be changed and used elsewhere if needed.
 	void UnbindBuffers(FRHICommandList& RHICmdList);
 

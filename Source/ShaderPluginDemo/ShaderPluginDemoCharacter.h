@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "PixelShaderUsageExample.h"
 #include "ComputeShaderUsageExample.h"
+#include "VolumetricShaderUsageExample.h"
 #include "ShaderPluginDemoCharacter.generated.h"
 
 class UInputComponent;
@@ -132,8 +133,9 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 private:
-	FPixelShaderUsageExample* PixelShading;
-	FComputeShaderUsageExample* ComputeShading;
+	FPixelShaderUsageExample* PixelShader;
+	FComputeShaderUsageExample* ComputeShader;
+	FVolumetricShaderUsageExample* VolumetricShader;
 
 	float EndColorBuildup;
 	float EndColorBuildupDirection;
@@ -144,5 +146,6 @@ private:
 	void ModifyComputeShaderBlend(float NewScalar);
 	void SavePixelShaderOutput();
 	void SaveComputeShaderOutput();
+	void SaveVolumetricShaderOutput();
 };
 
